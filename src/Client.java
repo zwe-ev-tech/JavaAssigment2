@@ -64,9 +64,8 @@ public class Client {
                     System.out.println("Display All Student");
                     break;
                 case 4 :
-                    System.out.println("Analyze All course Works");
+                    analyzeCourseWorkStudentMarks();
                     break;
-
                 case 5 :
                     System.out.println("Report Grade by student ID");
                     break;
@@ -81,5 +80,10 @@ public class Client {
                     break;
             }
         } while (choice != 1);
+    }
+
+    // Analyze coursework students marks
+    private void analyzeCourseWorkStudentMarks() {
+
     }
 }

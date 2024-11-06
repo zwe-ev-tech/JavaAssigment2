@@ -1,5 +1,6 @@
 package unit;
 
+import helper.Helper;
 import model.ResearchDetails;
 
 public class Unit_Research extends Unit{
@@ -18,11 +19,7 @@ public class Unit_Research extends Unit{
     // Show final grade
     public String getFinalGrade() {
         double overallMark = calculateOverallMark();
-        if (overallMark >= 80) return "HD";
-        if (overallMark >= 70) return "D";
-        if (overallMark >= 60) return "C";
-        if (overallMark >= 50) return "P";
-        return "N";
+        return Helper.getFinalGrade(overallMark);
     }
 
 }
