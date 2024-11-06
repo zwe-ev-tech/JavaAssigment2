@@ -9,6 +9,10 @@ public class Student {
         studentDetails = _studentDetails;
     }
 
+    public Long getStudentId() {
+        return this.studentDetails.studentID;
+    }
+
     // Getters
     public StudentDetails getStudentDetails() {
         return studentDetails;

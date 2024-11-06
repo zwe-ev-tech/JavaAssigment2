@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Client {
-    private ArrayList<Student> students = new ArrayList<>();
+    private static ArrayList<Student> students = new ArrayList<>();
     public static void main(String[] args) {
-
-        System.out.println("Hello world!");
+        Client.loadStudentDetails("C:\\Users\\Asus\\OneDrive\\Desktop\\MURDOCH\\ICT167 - PRINCIPLES OF COMP SCIENCE\\Assignments\\JavaA2\\JavaAssigment2\\src\\csv\\students.csv");
+        Client.displayMenu();
     }
 
     // Load student information from CSV file
-    public void loadStudentDetails(String filePath) {
+    private static void loadStudentDetails(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -39,7 +39,7 @@ public class Client {
     }
 
     // Display menu
-    public void displayMenu() {
+    public static void displayMenu() {
         Scanner scanner = new Scanner(System.in);
         int choice;
         do {
@@ -58,10 +58,14 @@ public class Client {
                     System.out.println("Exiting program.");
                     break;
                 case 2 :
-                    System.out.println("Remove Student");
+                    System.out.println("Please enter student Id");
+                    var studentID = scanner.next();
+                    System.out.println("ID: " + studentID);
+                    removeStudentByID(Long.parseLong(studentID));
                     break;
                 case 3 :
-                    System.out.println("Display All Student");
+                    System.out.println("All Student Information: ");
+                    displayAllStudent();
                     break;
                 case 4 :
                     analyzeCourseWorkStudentMarks();
@@ -83,7 +87,27 @@ public class Client {
     }
 
     // Analyze coursework students marks
-    private void analyzeCourseWorkStudentMarks() {
+    private static void analyzeCourseWorkStudentMarks() {
+
+    }
+    // Case 2 remove student by ID
+    private static void removeStudentByID(Long studentID) {
+        System.out.println("Before Removing " + students.size());
+        students.removeIf(student -> student.getStudentId().equals(studentID));
+        System.out.println("After Removing " + students.size());
+    }
+    // Case 3 Display All student
+    private static void displayAllStudent() {
+        students.forEach(student -> {
+           String enrollmentType;
+           if (student instanceof Student_Course) {
+               enrollmentType = "C";
+           } else {
+               enrollmentType = "R";
+           }
+           System.out.println("Enrollment: " + enrollmentType);
+           System.out.println("Student Name: " + student.getName());
+        });
 
     }
 }
