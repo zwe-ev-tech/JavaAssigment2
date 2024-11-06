@@ -74,7 +74,8 @@ public class Client {
                     System.out.println("Report Grade by student ID");
                     break;
                 case 6 :
-                    System.out.println("Sort Students by ID");
+                    System.out.println("Sorting by Student Id");
+                    sortByID();
                     break;
                 case 7 :
                     System.out.println("Save sorted list to CSV");
@@ -92,9 +93,7 @@ public class Client {
     }
     // Case 2 remove student by ID
     private static void removeStudentByID(Long studentID) {
-        System.out.println("Before Removing " + students.size());
         students.removeIf(student -> student.getStudentId().equals(studentID));
-        System.out.println("After Removing " + students.size());
     }
     // Case 3 Display All student
     private static void displayAllStudent() {
@@ -108,6 +107,9 @@ public class Client {
            System.out.println("Enrollment: " + enrollmentType);
            System.out.println("Student Name: " + student.getName());
         });
-
+    }
+    // Case 6 Sort Student by ID
+    private static void sortByID() {
+        students.sort((a, b) -> a.getStudentId().compareTo(b.getStudentId()));
     }
 }
