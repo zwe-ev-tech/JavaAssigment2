@@ -1,6 +1,7 @@
 package unit;
 
 import helper.Helper;
+import helper.PrintTypes;
 import model.CourseDetails;
 
 public class Unit_Course extends Unit{
@@ -30,5 +31,17 @@ public class Unit_Course extends Unit{
     public String getFinalGrade() {
         double overallMark = calculateOverallMark();
         return Helper.getFinalGrade(overallMark);
+    }
+
+    @Override
+    public void reportFinalGrade() {
+        int i = 1;
+        for(int assigment : this.courseDetails.assignments) {
+            Helper.print("Assigment " + i + ": " + assigment, PrintTypes.INFO);
+            i++;
+        }
+        Helper.print("Final Exam: " + this.courseDetails.finalExam, PrintTypes.INFO);
+        String finalGrade = this.getFinalGrade();
+        Helper.print("Final Grade: " + finalGrade, PrintTypes.INFO);
     }
 }

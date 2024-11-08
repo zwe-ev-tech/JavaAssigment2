@@ -1,115 +1,171 @@
+import helper.Helper;
+import helper.PrintTypes;
+import model.CourseDetails;
 import model.StudentDetails;
 import student.Student;
 import student.Student_Course;
 import student.Student_Research;
+import unit.Unit_Course;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Client {
-    private static ArrayList<Student> students = new ArrayList<>();
-    public static void main(String[] args) {
-        Client.loadStudentDetails("C:\\Users\\Asus\\OneDrive\\Desktop\\MURDOCH\\ICT167 - PRINCIPLES OF COMP SCIENCE\\Assignments\\JavaA2\\JavaAssigment2\\src\\csv\\students.csv");
-        Client.displayMenu();
-    }
+    private ArrayList<Student> students = new ArrayList<>();
+    private boolean isSorted = false;
 
     // Load student information from CSV file
-    private static void loadStudentDetails(String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+    public void loadStudentDetails(URL filePath) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(filePath.openStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 StudentDetails studentDetails = new StudentDetails(data[1], data[2], Long.parseLong(data[3]));
-                if (data[0].toLowerCase().equals("c")) {
-                    Student_Course studentCourse = new Student_Course(studentDetails);
+                if (data[0].equalsIgnoreCase("c")) {
+                    int[] assignments = new int[4];
+                    assignments[0] = Integer.parseInt(data[6]);
+                    assignments[1] = Integer.parseInt(data[7]);
+                    assignments[2] = Integer.parseInt(data[8]);
+                    assignments[3] = Integer.parseInt(data[9]);
+                    CourseDetails courseDetails = new CourseDetails(data[4],Integer.parseInt(data[5]), assignments, Integer.parseInt(data[10]));
+                    Unit_Course unitCourse = new Unit_Course(courseDetails);
+                    Student_Course studentCourse = new Student_Course(studentDetails, unitCourse);
                     // Add course based student into Array List
                     students.add(studentCourse);
-                } else if (data[0].toLowerCase().equals("r")) {
+                } else if (data[0].equalsIgnoreCase("r")) {
                     Student_Research studentResearch = new Student_Research(studentDetails);
                     // Add research based student into Array List
                     students.add(studentResearch);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
+            Helper.print("Error reading file: " + e.getMessage(), PrintTypes.REMOVE);
         }
     }
 
     // Display menu
-    public static void displayMenu() {
+    public void displayMenu() {
         Scanner scanner = new Scanner(System.in);
         int choice;
         do {
-            System.out.println("\n1. Quit");
-            System.out.println("2. Remove student by ID");
-            System.out.println("3. Display all students");
-            System.out.println("4. Analyze coursework student marks");
-            System.out.println("5. Report grade by student ID");
-            System.out.println("6. Sort students by ID");
-            System.out.println("7. Save sorted list to CSV");
+            Helper.print("\n1. Quit", PrintTypes.DISPLAY);
+            Helper.print("2. Remove student by ID", PrintTypes.DISPLAY);
+            Helper.print("3. Display all students", PrintTypes.DISPLAY);
+            Helper.print("4. Analyze coursework student marks", PrintTypes.DISPLAY);
+            Helper.print("5. Report grade by student ID", PrintTypes.DISPLAY);
+            Helper.print("6. Sort students by ID", PrintTypes.DISPLAY);
+            Helper.print("7. Save sorted list to CSV", PrintTypes.DISPLAY);
 
             System.out.print("Select an option: ");
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 :
-                    System.out.println("Exiting program.");
+                    Helper.print("Exiting program.", PrintTypes.TITLE);
                     break;
                 case 2 :
-                    System.out.println("Please enter student Id");
-                    var studentID = scanner.next();
-                    System.out.println("ID: " + studentID);
-                    removeStudentByID(Long.parseLong(studentID));
+                    Helper.print("Please enter student Id", PrintTypes.TITLE);
+                    String studentId = scanner.next();
+                    removeStudentByID(Long.parseLong(studentId));
                     break;
                 case 3 :
-                    System.out.println("All Student Information: ");
+                    Helper.print("All Student Information: ", PrintTypes.TITLE);
                     displayAllStudent();
                     break;
                 case 4 :
                     analyzeCourseWorkStudentMarks();
                     break;
                 case 5 :
-                    System.out.println("Report Grade by student ID");
+                    Helper.print("Please enter student Id", PrintTypes.TITLE);
+                    String studentIdForReport = scanner.next();
+                    getReportGradeByStudentId(Long.parseLong(studentIdForReport));
                     break;
                 case 6 :
-                    System.out.println("Sorting by Student Id");
+                    Helper.print("Sorting by Student Id", PrintTypes.TITLE);
                     sortByID();
                     break;
                 case 7 :
-                    System.out.println("Save sorted list to CSV");
+                    Helper.print("Save sorted list to CSV", PrintTypes.TITLE);
+                    savedSortedArray();
                     break;
                 default :
-                    System.out.println("Invalid choice. Please try again.");
+                    Helper.print("Invalid choice. Please try again.", PrintTypes.TITLE);
                     break;
             }
         } while (choice != 1);
     }
 
     // Analyze coursework students marks
-    private static void analyzeCourseWorkStudentMarks() {
+    private void analyzeCourseWorkStudentMarks() {
 
     }
     // Case 2 remove student by ID
-    private static void removeStudentByID(Long studentID) {
-        students.removeIf(student -> student.getStudentId().equals(studentID));
+    private void removeStudentByID(Long studentID) {
+        for (int i =0; i < students.size(); i ++) {
+            Student studentToRemove = students.get(i);
+            if (studentToRemove.getStudentId().equals(studentID)) {
+                students.remove(studentToRemove);
+                Helper.print("Student ID " + studentToRemove.getStudentId() + " has been removed.", PrintTypes.REMOVE);
+                break;
+            }
+        }
+        isSorted = false;
     }
     // Case 3 Display All student
-    private static void displayAllStudent() {
+    private void displayAllStudent() {
         students.forEach(student -> {
-           String enrollmentType;
-           if (student instanceof Student_Course) {
-               enrollmentType = "C";
-           } else {
-               enrollmentType = "R";
-           }
-           System.out.println("Enrollment: " + enrollmentType);
-           System.out.println("Student Name: " + student.getName());
+            String enrollmentType;
+            if (student instanceof Student_Course) {
+                enrollmentType = "C";
+            } else {
+                enrollmentType = "R";
+            }
+            Helper.print("Enrollment: " + enrollmentType, PrintTypes.INFO);
+            Helper.print("Student Id: " + student.getStudentId(), PrintTypes.INFO);
+            Helper.print("Student Name: " + student.getName(), PrintTypes.INFO);
+            Helper.print("---- xx ---- xx ----", PrintTypes.INFO);
         });
     }
+
+
+    //Case 5: get Report Grade by Student ID
+    private void getReportGradeByStudentId(Long studentId) {
+        for (int i =0; i < students.size(); i ++) {
+            Student studentDetail = students.get(i);
+            if (studentDetail.getStudentId().equals(studentId)) {
+                studentDetail.reportGrade();
+                break;
+            }
+        }
+    }
     // Case 6 Sort Student by ID
-    private static void sortByID() {
+    private void sortByID() {
         students.sort((a, b) -> a.getStudentId().compareTo(b.getStudentId()));
+        isSorted = true;
+    }
+
+    // Case 7 Saed sorted array to CSV
+    private void savedSortedArray() {
+        if (!isSorted) {
+            this.sortByID();
+        }
+        // Get URL of the csv file
+        URL path = Thread.currentThread().getContextClassLoader().getResource("csv");
+        String filePath = path.getPath() + "/sorted_student.csv";
+        try(PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            students.forEach(student -> {
+                StudentDetails studentDetail = student.getStudentDetails();
+                if (student instanceof  Student_Course) {
+                    writer.println("C," + studentDetail.firstName + "," + studentDetail.lastName + "," + studentDetail.studentID);
+                } else if (student instanceof Student_Research) {
+                    writer.println("R," + studentDetail.firstName + "," + studentDetail.lastName + "," + studentDetail.studentID);
+                }
+            });
+            Helper.print("Sorted data saved into file: " + filePath, PrintTypes.TITLE);
+        } catch (IOException e) {
+            Helper.print("Error while writing to file: " + e.getMessage(), PrintTypes.REMOVE);
+        }
+
     }
 }
