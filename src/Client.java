@@ -1,11 +1,13 @@
 import helper.Helper;
 import helper.PrintTypes;
 import model.CourseDetails;
+import model.ResearchDetails;
 import model.StudentDetails;
 import student.Student;
 import student.Student_Course;
 import student.Student_Research;
 import unit.Unit_Course;
+import unit.Unit_Research;
 
 import java.io.*;
 import java.net.URL;
@@ -35,7 +37,8 @@ public class Client {
                     // Add course based student into Array List
                     students.add(studentCourse);
                 } else if (data[0].equalsIgnoreCase("r")) {
-                    Student_Research studentResearch = new Student_Research(studentDetails);
+                    Unit_Research unitResearch = new Unit_Research(new ResearchDetails(Integer.parseInt(data[4]), Integer.parseInt(data[5])));
+                    Student_Research studentResearch = new Student_Research(studentDetails, unitResearch);
                     // Add research based student into Array List
                     students.add(studentResearch);
                 }
@@ -98,13 +101,35 @@ public class Client {
 
     // Analyze coursework students marks
     private void analyzeCourseWorkStudentMarks() {
+        double total = 0;
+        int count = 0;
+        int aboveAverage = 0;
+        int belowAverage = 0;
 
+        for (Student student : students) {
+            if (student instanceof Student_Course) {
+                Student_Course courseStudent = (Student_Course) student;
+                double overallMark = courseStudent.calculateOverallMark();
+                total += overallMark;
+                count++;
+
+                double average = total / count;
+                if (overallMark >= average) {
+                    aboveAverage++;
+                } else {
+                    belowAverage++;
+                }
+            }
+        }
+
+        System.out.println("Coursework students above average: " + aboveAverage);
+        System.out.println("Coursework students below average: " + belowAverage);
     }
     // Case 2 remove student by ID
     private void removeStudentByID(Long studentID) {
         for (int i =0; i < students.size(); i ++) {
             Student studentToRemove = students.get(i);
-            if (studentToRemove.getStudentId().equals(studentID)) {
+            if (studentToRemove.equals(studentID)) {
                 students.remove(studentToRemove);
                 Helper.print("Student ID " + studentToRemove.getStudentId() + " has been removed.", PrintTypes.REMOVE);
                 break;

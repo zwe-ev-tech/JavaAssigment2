@@ -1,6 +1,7 @@
 package unit;
 
 import helper.Helper;
+import helper.PrintTypes;
 import model.ResearchDetails;
 
 public class Unit_Research extends Unit{
@@ -17,9 +18,17 @@ public class Unit_Research extends Unit{
     }
 
     // Show final grade
-    public String getFinalGrade() {
+    private String getFinalGrade() {
         double overallMark = calculateOverallMark();
         return Helper.getFinalGrade(overallMark);
+    }
+
+    @Override
+    public void reportFinalGrade() {
+        String finalGrade = getFinalGrade();
+        Helper.print("Proposal: " + this.researchDetails.proposal, PrintTypes.INFO);
+        Helper.print("Dissertation: " + this.researchDetails.dissertation, PrintTypes.INFO);
+        Helper.print("Final Grade: " + finalGrade, PrintTypes.INFO);
     }
 
 }

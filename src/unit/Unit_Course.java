@@ -12,14 +12,6 @@ public class Unit_Course extends Unit{
         this.courseDetails = _courseDetails;
     }
 
-    public void setAssignments(int[] assignmentMarks) {
-        this.courseDetails.assignments = assignmentMarks;
-    }
-
-    public void setFinalExam(int examMark) {
-        this.courseDetails.finalExam = examMark;
-    }
-
     // Calculate overall mark
     public double calculateOverallMark() {
         double overallMark = 0;
@@ -28,7 +20,7 @@ public class Unit_Course extends Unit{
     }
 
     // Show final grade
-    public String getFinalGrade() {
+    private String getFinalGrade() {
         double overallMark = calculateOverallMark();
         return Helper.getFinalGrade(overallMark);
     }
