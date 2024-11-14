@@ -122,8 +122,8 @@ public class Client {
             }
         }
 
-        System.out.println("Coursework students above average: " + aboveAverage);
-        System.out.println("Coursework students below average: " + belowAverage);
+        Helper.print("Coursework students above average: " + aboveAverage, PrintTypes.INFO);
+        Helper.print("Coursework students below average: " + belowAverage, PrintTypes.INFO);
     }
     // Case 2 remove student by ID
     private void removeStudentByID(Long studentID) {
