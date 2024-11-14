@@ -129,7 +129,7 @@ public class Client {
     private void removeStudentByID(Long studentID) {
         for (int i =0; i < students.size(); i ++) {
             Student studentToRemove = students.get(i);
-            if (studentToRemove.equals(studentID)) {
+            if (studentToRemove.Equals(studentID)) {
                 students.remove(studentToRemove);
                 Helper.print("Student ID " + studentToRemove.getStudentId() + " has been removed.", PrintTypes.REMOVE);
                 break;

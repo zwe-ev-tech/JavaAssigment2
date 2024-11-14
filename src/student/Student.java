@@ -27,7 +27,7 @@ public class Student {
         System.out.println("There is no grade here.");
     }
 
-    public boolean equals(StudentDetails _studentDetail) {
-        return studentDetails.studentID.equals(_studentDetail.studentID);
+    public boolean Equals(Long _studentID) {
+        return studentDetails.studentID.equals(_studentID);
     }
 }
