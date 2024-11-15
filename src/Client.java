@@ -168,6 +168,7 @@ public class Client {
     private void sortByID() {
         students.sort((a, b) -> a.getStudentId().compareTo(b.getStudentId()));
         isSorted = true;
+        this.displayAllStudent();
     }
 
     // Case 7 Saed sorted array to CSV
