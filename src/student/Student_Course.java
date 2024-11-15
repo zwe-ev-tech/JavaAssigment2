@@ -16,6 +16,10 @@ public class Student_Course extends Student {
         this.unitCourse = _unitCourse;
     }
 
+    public Unit_Course getUnitCourse() {
+        return unitCourse;
+    }
+
     public double calculateOverallMark() {
         return unitCourse.calculateOverallMark();
     }

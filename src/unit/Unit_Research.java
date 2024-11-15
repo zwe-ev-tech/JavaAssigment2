@@ -12,6 +12,10 @@ public class Unit_Research extends Unit{
         this.researchDetails = _researchDetails;
     }
 
+    public ResearchDetails getResearchDetails() {
+        return researchDetails;
+    }
+
     // Calculate overall mark
     public double calculateOverallMark() {
         return this.researchDetails.proposal * 0.4 + this.researchDetails.dissertation * 0.6;

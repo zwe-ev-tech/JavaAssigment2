@@ -12,6 +12,10 @@ public class Unit_Course extends Unit{
         this.courseDetails = _courseDetails;
     }
 
+    public CourseDetails getCourseDetails() {
+        return courseDetails;
+    }
+
     // Calculate overall mark
     public double calculateOverallMark() {
         double overallMark = 0;

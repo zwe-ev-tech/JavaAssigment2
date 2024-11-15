@@ -1,5 +1,7 @@
 package student;
 
+import helper.Helper;
+import helper.PrintTypes;
 import model.StudentDetails;
 
 public class Student {
@@ -24,7 +26,7 @@ public class Student {
 
     // Method to report grade
     public void reportGrade() {
-        System.out.println("There is no grade here.");
+        Helper.print("There is no grade here.", PrintTypes.INFO);
     }
 
     public boolean Equals(Long _studentID) {

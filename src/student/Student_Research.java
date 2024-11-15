@@ -1,5 +1,7 @@
 package student;
 
+import helper.Helper;
+import helper.PrintTypes;
 import model.StudentDetails;
 import unit.EnrolmentType;
 import unit.Unit_Research;
@@ -14,16 +16,16 @@ public class Student_Research extends Student {
         this.unitResearch = _unitResearch;
     }
 
-    public double calculateOverallMark() {
-        return unitResearch.calculateOverallMark();
+    public Unit_Research getUnitResearch() {
+        return unitResearch;
     }
 
     @Override
     public void reportGrade() {
         StudentDetails studentDetails = getStudentDetails();
-        System.out.println("Enrolment Type: " + enrolmentType.name());
-        System.out.println("Student Id: " + studentDetails.studentID);
-        System.out.println("Name: " + this.getName());
+        Helper.print("Enrolment Type: " + enrolmentType.name(), PrintTypes.INFO);
+        Helper.print("Student Id: " + studentDetails.studentID, PrintTypes.INFO);
+        Helper.print("Name: " + this.getName(), PrintTypes.INFO);
         this.unitResearch.reportFinalGrade();
 
     }

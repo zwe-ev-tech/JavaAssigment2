@@ -12,10 +12,11 @@ import unit.Unit_Research;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Client {
-    private ArrayList<Student> students = new ArrayList<>();
+    private ArrayList<Student> students = new ArrayList<Student>();
     private boolean isSorted = false;
 
     // Load student information from CSV file
@@ -125,6 +126,7 @@ public class Client {
         Helper.print("Coursework students above average: " + aboveAverage, PrintTypes.INFO);
         Helper.print("Coursework students below average: " + belowAverage, PrintTypes.INFO);
     }
+
     // Case 2 remove student by ID
     private void removeStudentByID(Long studentID) {
         for (int i =0; i < students.size(); i ++) {
@@ -135,24 +137,33 @@ public class Client {
                 break;
             }
         }
+        this.displayAllStudent();
         isSorted = false;
     }
+
     // Case 3 Display All student
     private void displayAllStudent() {
         students.forEach(student -> {
-            String enrollmentType;
             if (student instanceof Student_Course) {
-                enrollmentType = "C";
+                Student_Course courseStudent = (Student_Course) student;
+                Unit_Course courseUnit = courseStudent.getUnitCourse();
+                Helper.print("Enrollment: C", PrintTypes.INFO);
+                Helper.print("Student Id: " + courseStudent.getStudentId(), PrintTypes.INFO);
+                Helper.print("Student Name: " + courseStudent.getName(), PrintTypes.INFO);
+                courseUnit.reportFinalGrade();
+                Helper.print("---- xx ---- xx ----", PrintTypes.INFO);
             } else {
-                enrollmentType = "R";
+                Student_Research studentResearch = (Student_Research) student;
+                Unit_Research unitResearch = studentResearch.getUnitResearch();
+                Helper.print("Enrollment: R", PrintTypes.INFO);
+                Helper.print("Student Id: " + studentResearch.getStudentId(), PrintTypes.INFO);
+                Helper.print("Student Name: " + studentResearch.getName(), PrintTypes.INFO);
+                Helper.print("Student Name: " + studentResearch.getName(), PrintTypes.INFO);
+                unitResearch.reportFinalGrade();
+                Helper.print("---- xx ---- xx ----", PrintTypes.INFO);
             }
-            Helper.print("Enrollment: " + enrollmentType, PrintTypes.INFO);
-            Helper.print("Student Id: " + student.getStudentId(), PrintTypes.INFO);
-            Helper.print("Student Name: " + student.getName(), PrintTypes.INFO);
-            Helper.print("---- xx ---- xx ----", PrintTypes.INFO);
         });
     }
-
 
     //Case 5: get Report Grade by Student ID
     private void getReportGradeByStudentId(Long studentId) {
@@ -166,12 +177,12 @@ public class Client {
     }
     // Case 6 Sort Student by ID
     private void sortByID() {
-        students.sort((a, b) -> a.getStudentId().compareTo(b.getStudentId()));
+        students.sort(Comparator.comparing(Student::getStudentId));
         isSorted = true;
         this.displayAllStudent();
     }
 
-    // Case 7 Saed sorted array to CSV
+    // Case 7 Saved sorted array to CSV
     private void savedSortedArray() {
         if (!isSorted) {
             this.sortByID();
